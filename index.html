@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roshan Kumar — Field Notes from Code</title>
+  <meta name="description"
+    content="Personal portfolio of Roshan Kumar, a computer science student charting a course through code.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================================
+   TOKENS
+========================================================= */
+    :root {
+      --bg-void: #0F0A1E;
+      --bg-deep: #1B1330;
+      --bg-deep-2: #241A3F;
+      --paper: #F7F2E9;
+      --ink: #241A38;
+      --ink-soft: #4A3F63;
+      --muted: #9C8FBF;
+      --gold: #E8B84B;
+      --coral: #FF6F59;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Space Grotesk', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --max-width: 1120px;
+      --radius: 4px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 500;
+      margin: 0 0 0.5em;
+      line-height: 1.15;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    .small {
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+    }
+
+    .section-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 5.5rem 1.75rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 0 0 1rem;
+    }
+
+    .eyebrow-dark {
+      color: var(--coral);
+    }
+
+    .section-lede {
+      color: var(--ink-soft);
+      max-width: 46ch;
+      margin: 0.25rem 0 2.5rem;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--coral);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* =========================================================
+   BUTTONS
+========================================================= */
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 1.6rem;
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg-void);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      background: #f2c765;
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(247, 242, 233, 0.35);
+      color: var(--paper);
+      margin-left: 0.75rem;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* =========================================================
+   NAV
+========================================================= */
+    .nav-toggle {
+      display: none;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.75rem;
+      background: rgba(15, 10, 30, 0.55);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--paper);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-dot {
+      color: var(--gold);
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .site-nav a {
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-family: var(--font-mono);
+      opacity: 0.85;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .site-nav a:hover {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 0.4rem;
+    }
+
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background: var(--paper);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    @media (max-width: 780px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .site-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--bg-deep);
+        padding: 1.5rem 1.75rem;
+        gap: 1.1rem;
+        transform: translateY(-8px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+      }
+
+      .nav-toggle:checked~.site-header .site-nav {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-toggle:checked~.site-header .hamburger span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+
+      .nav-toggle:checked~.site-header .hamburger span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .nav-toggle:checked~.site-header .hamburger span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+    }
+
+    /* =========================================================
+   HERO + PLANET ORRERY ANIMATION
+========================================================= */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 70% 20%, var(--bg-deep-2), var(--bg-void) 65%);
+      color: var(--paper);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .starfield {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+      background-repeat: repeat;
+    }
+
+    .stars-small {
+      background-image:
+        radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 120px 90px, #fff, transparent),
+        radial-gradient(1px 1px at 210px 50px, #fff, transparent),
+        radial-gradient(1px 1px at 60px 160px, #fff, transparent);
+      background-size: 320px 240px;
+      opacity: 0.4;
+    }
+
+    /* Planet Orrery Styles */
+    .orrery {
+      position: absolute;
+      right: 6%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 340px;
+      height: 340px;
+      z-index: 0;
+    }
+
+    @media (max-width: 900px) {
+      .orrery {
+        opacity: 0.2;
+        right: -40px;
+      }
+    }
+
+    .sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 30px 6px rgba(232, 184, 75, 0.25);
+    }
+
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 1px solid rgba(247, 242, 233, 0.1);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit-1 {
+      width: 130px;
+      height: 130px;
+      animation: spin 16s linear infinite; /* Kept clean and slow */
+    }
+
+    .orbit-2 {
+      width: 220px;
+      height: 220px;
+      animation: spin 26s linear infinite;
+    }
+
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .planet-1 {
+      width: 10px;
+      height: 10px;
+      top: -5px;
+      left: 50%;
+      background: var(--coral);
+    }
+
+    .planet-2 {
+      width: 12px;
+      height: 12px;
+      top: -6px;
+      left: 50%;
+      background: #7FB0C9;
+    }
+
+    @keyframes spin {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      padding: 0 1.75rem;
+      margin: 0 auto;
+      margin-left: 6vw;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      margin-bottom: 0.6em;
+    }
+
+    .hero-sub {
+      color: rgba(247, 242, 233, 0.75);
+      max-width: 52ch;
+      margin-bottom: 2.2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* =========================================================
+   ABOUT
+========================================================= */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .avatar-wrap {
+      text-align: center;
+    }
+
+    .avatar {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      margin: 0 auto 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      color: var(--paper);
+      background: conic-gradient(from 200deg, var(--bg-deep), var(--coral), var(--gold), var(--bg-deep));
+    }
+
+    .avatar-caption {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+
+    .about-text p {
+      color: var(--ink-soft);
+      margin: 0 0 1.1rem;
+      max-width: 62ch;
+    }
+
+    .about-text h2 {
+      color: var(--ink);
+    }
+
+    /* =========================================================
+   SKILLS / STAR CHART
+========================================================= */
+    .skills {
+      background: var(--bg-deep);
+      color: var(--paper);
+    }
+
+    .skills .section-lede {
+      color: var(--muted);
+    }
+
+    .chart {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      max-width: 720px;
+    }
+
+    .chart-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .chart-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+
+    .chart-label .mono {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .chart-track {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(247, 242, 233, 0.1);
+      overflow: hidden;
+    }
+
+    .chart-fill {
+      height: 100%;
+      border-radius: 3px;
+      width: 0;
+      animation: fillbar 1s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      animation-delay: 0.1s;
+    }
+
+    .fill-html {
+      background: var(--coral);
+      --w: 96%;
+    }
+
+    .fill-css {
+      background: var(--gold);
+      --w: 98%;
+    }
+
+    .fill-responsive {
+      background: #7FB0C9;
+      --w: 90%;
+    }
+
+    .fill-python {
+      background: #8FBF8A;
+      --w: 85%;
+    }
+
+    @keyframes fillbar {
+      to {
+        width: var(--w);
+      }
+    }
+
+    /* =========================================================
+   PROJECTS / CARDS
+========================================================= */
+    .projects {
+      background: var(--paper);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .flip-card {
+      perspective: 1200px;
+      height: 260px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s ease-out;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner,
+    .flip-card:focus-within .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .flip-front {
+      background: var(--bg-deep);
+      color: var(--paper);
+      justify-content: flex-end;
+      gap: 0.4rem;
+      border: 1px solid rgba(36, 26, 56, 0.08);
+    }
+
+    .flip-front h3 {
+      margin: 0;
+    }
+
+    .flip-front .mono {
+      color: var(--muted);
+    }
+
+    .flip-back {
+      background: var(--gold);
+      color: var(--bg-void);
+      transform: rotateY(180deg);
+      justify-content: space-between;
+    }
+
+    .flip-back p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .flip-back .mono {
+      align-self: flex-start;
+    }
+
+    .flip-back a {
+      color: var(--bg-void);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .glyph {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      margin-bottom: auto;
+      position: relative;
+    }
+
+    .glyph-orbit {
+      border: 1.5px solid var(--gold);
+    }
+
+    .glyph-comet {
+      background: linear-gradient(135deg, var(--coral), transparent);
+    }
+
+    .glyph-scope {
+      border: 1.5px solid var(--muted);
+      background: transparent;
+    }
+
+    .glyph-ai {
+      border: 1.5px solid #7FB0C9;
+    }
+
+    /* =========================================================
+   TIMELINE
+========================================================= */
+    .journey {
+      background: var(--bg-deep);
+      color: var(--paper);
+    }
+
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-width: 700px;
+      border-left: 1px solid rgba(247, 242, 233, 0.15);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 2.5rem 2.2rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-marker {
+      position: absolute;
+      left: -0.95rem;
+      top: 0;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+    }
+
+    .timeline-body h3 {
+      color: var(--paper);
+      font-size: 1.15rem;
+    }
+
+    .timeline-body p {
+      color: var(--muted);
+      margin: 0;
+      max-width: 55ch;
+    }
+
+    /* =========================================================
+   CONTACT
+========================================================= */
+    .contact {
+      background: var(--bg-deep);
+      color: var(--paper);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .contact .section-lede {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .contact-card {
+      border: 1px solid rgba(247, 242, 233, 0.15);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .contact-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 1.3rem;
+      text-decoration: none;
+      color: var(--paper);
+      border-bottom: 1px solid rgba(247, 242, 233, 0.1);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .contact-line:last-child {
+      border-bottom: none;
+    }
+
+    .contact-line:hover {
+      background: rgba(232, 184, 75, 0.08);
+      color: var(--gold);
+    }
+
+    .contact-line .mono {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    /* =========================================================
+   FOOTER
+========================================================= */
+    .site-footer {
+      background: var(--bg-void);
+      color: var(--muted);
+      text-align: center;
+      padding: 1.75rem;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+
+  <header class="site-header">
+    <a href="#top" class="logo">R<span class="logo-dot">·</span>K</a>
+
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="site-nav">
+      <a href="#about">About</a>
+      <a href="#skills">Skills Chart</a>
+      <a href="#projects">Projects</a>
+      <a href="#journey">Log</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="starfield" aria-hidden="true">
+      <div class="stars stars-small"></div>
+      <div class="stars stars-medium"></div>
+    </div>
+
+    <div class="orrery" aria-hidden="true">
+      <div class="orbit orbit-1">
+        <div class="planet planet-1"></div>
+      </div>
+      <div class="orbit orbit-2">
+        <div class="planet planet-2"></div>
+      </div>
+      <div class="sun"></div>
+    </div>
+
+    <div class="hero-content">
+      <p class="eyebrow">Developer Portfolio &nbsp;·&nbsp; Roshan Kumar</p>
+      <h1>Building on the web,<br>one script at a time.</h1>
+      <p class="hero-sub">I'm Roshan Kumar, seem to be a front-end developer who treats every coding challenge like a clear structured document. This page is built using lightweight, clean HTML and CSS markup rules.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">See my projects</a>
+        <a href="#contact" class="btn btn-ghost">Send a message</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="section-inner about-grid">
+      <div class="avatar-wrap">
+        <div class="avatar">RK</div>
+        <p class="avatar-caption">Developer & Code Learner</p>
+      </div>
+      <div class="about-text">
+        <p class="eyebrow eyebrow-dark">Introduction</p>
+        <h2>About my development journey</h2>
+        <p>I focus on learning programming clean layouts. HTML gives me the logical structure to construct documents, while CSS allows me to map layouts beautifully and accessibly across interfaces.</p>
+        <p>This codebase is built to highlight standard web design principles without over-relying on unnecessary animations, creating a lightning-fast responsive layout that communicates ideas immediately.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="skills" id="skills">
+    <div class="section-inner">
+      <p class="eyebrow">Instrument readings</p>
+      <h2>My Technology Stack</h2>
+      <p class="section-lede">A visual representation of languages and styling environments I enjoy working with.</p>
+
+      <div class="chart">
+        <div class="chart-row">
+          <div class="chart-label"><span>HTML</span><span class="mono">Comfort level: 95%</span></div>
+          <div class="chart-track">
+            <div class="chart-fill fill-html"></div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label"><span>CSS</span><span class="mono">Comfort level: 95%</span></div>
+          <div class="chart-track">
+            <div class="chart-fill fill-css"></div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label"><span>Responsive Web Development</span><span class="mono">Comfort level: 90%</span></div>
+          <div class="chart-track">
+            <div class="chart-fill fill-responsive"></div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label"><span>Python Programming</span><span class="mono">Comfort level: 85%</span></div>
+          <div class="chart-track">
+            <div class="chart-fill fill-python"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects" id="projects">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Portfolio Logs</p>
+      <h2>Things I've built</h2>
+      <p class="section-lede">Hover a card to see implementation details.</p>
+
+      <div class="card-grid">
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-face flip-front">
+              <div class="glyph glyph-orbit"></div>
+              <h3>Netflix Landing Page</h3>
+              <span class="mono small">01 — Scratch Build</span>
+            </div>
+            <div class="flip-face flip-back">
+              <p>A pixel-perfect clone of the original Netflix landing page platform interface built fully from scratch.</p>
+              <span class="mono small">HTML · Custom CSS Grid</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-face flip-front">
+              <div class="glyph glyph-comet"></div>
+              <h3>Personal Portfolio Website</h3>
+              <span class="mono small">02 — Personal Workspace</span>
+            </div>
+            <div class="flip-face flip-back">
+              <p>An interactive, clean layout built to house active applications, code notes, and progress logs.</p>
+              <span class="mono small">Semantic HTML · CSS Layouts</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-face flip-front">
+              <div class="glyph glyph-scope"></div>
+              <h3>Live GitHub Profile Layout</h3>
+              <span class="mono small">03 — Live Hub</span>
+            </div>
+            <div class="flip-face flip-back">
+              <p>A web page showcasing active deployment. View it live here: <a href="https://roshan-12design.github.io/roshan-profile/" target="_blank" rel="noopener">roshan-profile</a></p>
+              <span class="mono small">GitHub Pages Deployment</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-face flip-front">
+              <div class="glyph glyph-ai"></div>
+              <h3>Personal AI Assistant</h3>
+              <span class="mono small">04 — Script Scripting</span>
+            </div>
+            <div class="flip-face flip-back">
+              <p>A custom desktop assistant script built using Google's Gemini API key connection layer inside a clean Python execution module.</p>
+              <span class="mono small">Python · Gemini API</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="journey" id="journey">
+    <div class="section-inner">
+      <p class="eyebrow">Development Records</p>
+      <h2>Mission log so far</h2>
+
+      <ol class="timeline">
+        <li class="timeline-item">
+          <span class="timeline-marker mono">01</span>
+          <div class="timeline-body">
+            <h3>Structural Basics &amp; Layouts</h3>
+            <p>Learned document tree arrangements using semantic markup tags, forms, and custom sections.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <span class="timeline-marker mono">02</span>
+          <div class="timeline-body">
+            <h3>Cloning UI Interfaces</h3>
+            <p>Replicating real-world landing pages (like Netflix) to refine CSS Positioning, Flexbox layouts, and grids.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <span class="timeline-marker mono">03</span>
+          <div class="timeline-body">
+            <h3>API Integrations &amp; Logic</h3>
+            <p>Moving into script automation setups using Python to interface directly with large language models through custom API queries.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="section-inner contact-grid">
+      <div>
+        <p class="eyebrow">Open channels</p>
+        <h2>Let's connect</h2>
+        <p class="section-lede">Reach out directly via email or check out my active repositories on GitHub.</p>
+      </div>
+      <div class="contact-card">
+        <a class="contact-line" href="mailto:roshankumar89559@gmail.com">
+          <span class="mono small">EMAIL</span>
+          <span>roshankumar89559@gmail.com</span>
+        </a>
+        <a class="contact-line" href="https://github.com/Roshan-12design" target="_blank" rel="noopener">
+          <span class="mono small">GITHUB</span>
+          <span>github.com/Roshan-12design</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Built with HTML &amp; CSS only — Optimized Balanced Variant. © <span class="mono">2026</span> Roshan Kumar.</p>
+  </footer>
+
+</body>
+</html>
